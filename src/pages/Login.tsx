@@ -2,18 +2,41 @@ import { GraduationCap, Mail, Lock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link } from "react-router-dom";
+import { Link, Navigate } from "react-router-dom";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { supabase } from "@/integrations/supabase/client";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+  const { session } = useAuth();
+  const { toast } = useToast();
 
-  const handleLogin = (e: React.FormEvent) => {
+  if (session) {
+    return <Navigate to="/dashboard" replace />;
+  }
+
+  const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
-    // Demo: navigate to dashboard
+    setLoading(true);
+
+    const { error } = await supabase.auth.signInWithPassword({ email, password });
+
+    if (error) {
+      toast({
+        title: "Login failed",
+        description: error.message,
+        variant: "destructive",
+      });
+      setLoading(false);
+      return;
+    }
+
     navigate("/dashboard");
   };
 
@@ -47,6 +70,7 @@ const Login = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="pl-10 h-11 rounded-xl"
+                  required
                 />
               </div>
             </div>
@@ -61,11 +85,12 @@ const Login = () => {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   className="pl-10 h-11 rounded-xl"
+                  required
                 />
               </div>
             </div>
-            <Button type="submit" className="w-full h-11 rounded-xl text-base">
-              Sign In
+            <Button type="submit" className="w-full h-11 rounded-xl text-base" disabled={loading}>
+              {loading ? "Signing in…" : "Sign In"}
             </Button>
           </form>
 

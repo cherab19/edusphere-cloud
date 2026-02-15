@@ -3,6 +3,8 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { AuthProvider } from "@/contexts/AuthContext";
+import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
 import SignupSchool from "./pages/SignupSchool";
@@ -29,25 +31,27 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Routes>
-          <Route path="/" element={<Landing />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/signup-school" element={<SignupSchool />} />
-          <Route path="/dashboard" element={<Dashboard />} />
-          <Route path="/students" element={<Students />} />
-          <Route path="/teachers" element={<Teachers />} />
-          <Route path="/classes" element={<Classes />} />
-          <Route path="/subjects" element={<Subjects />} />
-          <Route path="/attendance" element={<Attendance />} />
-          <Route path="/grades" element={<Grades />} />
-          <Route path="/report-cards" element={<ReportCards />} />
-          <Route path="/fees" element={<Fees />} />
-          <Route path="/finance-dashboard" element={<FinanceDashboard />} />
-          <Route path="/library" element={<LibraryPage />} />
-          <Route path="/transport" element={<Transport />} />
-          <Route path="/announcements" element={<Announcements />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Landing />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/signup-school" element={<SignupSchool />} />
+            <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
+            <Route path="/students" element={<ProtectedRoute><Students /></ProtectedRoute>} />
+            <Route path="/teachers" element={<ProtectedRoute><Teachers /></ProtectedRoute>} />
+            <Route path="/classes" element={<ProtectedRoute><Classes /></ProtectedRoute>} />
+            <Route path="/subjects" element={<ProtectedRoute><Subjects /></ProtectedRoute>} />
+            <Route path="/attendance" element={<ProtectedRoute><Attendance /></ProtectedRoute>} />
+            <Route path="/grades" element={<ProtectedRoute><Grades /></ProtectedRoute>} />
+            <Route path="/report-cards" element={<ProtectedRoute><ReportCards /></ProtectedRoute>} />
+            <Route path="/fees" element={<ProtectedRoute><Fees /></ProtectedRoute>} />
+            <Route path="/finance-dashboard" element={<ProtectedRoute><FinanceDashboard /></ProtectedRoute>} />
+            <Route path="/library" element={<ProtectedRoute><LibraryPage /></ProtectedRoute>} />
+            <Route path="/transport" element={<ProtectedRoute><Transport /></ProtectedRoute>} />
+            <Route path="/announcements" element={<ProtectedRoute><Announcements /></ProtectedRoute>} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </AuthProvider>
       </BrowserRouter>
     </TooltipProvider>
   </QueryClientProvider>
