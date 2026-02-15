@@ -90,12 +90,10 @@ const SignupSchool = () => {
 
       toast({
         title: "School registered!",
-        description: "Please check your email to verify your account before signing in.",
+        description: "Welcome aboard! Redirecting to your dashboard…",
       });
 
-      // Sign out since email verification is required
-      await supabase.auth.signOut();
-      navigate("/login");
+      navigate("/dashboard");
     } catch (error: any) {
       toast({
         title: "Registration failed",
