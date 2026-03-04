@@ -36,6 +36,7 @@ const menuItems = [
   { label: "Library", icon: Library, href: "/library" },
   { label: "Transport", icon: Bus, href: "/transport" },
   { label: "Announcements", icon: Bell, href: "/announcements" },
+  { label: "Settings", icon: Settings, href: "/settings" },
 ];
 
 interface DashboardLayoutProps {
