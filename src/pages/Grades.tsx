@@ -7,7 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Search, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { Plus, Search, MoreHorizontal, Pencil, Trash2, Download } from "lucide-react";
+import { downloadCSV } from "@/lib/csvExport";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useSchoolQuery, useSchoolMutation } from "@/hooks/useSchoolData";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -56,7 +57,10 @@ const Grades = () => {
             <h1 className="font-display text-2xl font-bold mb-1">Grades</h1>
             <p className="text-muted-foreground text-sm">Manage exam results and scores</p>
           </div>
-          <Button className="rounded-xl gap-2" onClick={openCreate}><Plus className="w-4 h-4" /> Add Grade</Button>
+          <div className="flex gap-2">
+            <Button variant="outline" className="rounded-xl gap-2" onClick={() => downloadCSV(grades.map((g) => ({ Student: studentName(g.student_id), Subject: subjectName(g.subject_id), Exam: g.exam_type, Score: g.score, Remark: g.remark ?? "" })), "grades")} disabled={grades.length === 0}><Download className="w-4 h-4" /> Export CSV</Button>
+            <Button className="rounded-xl gap-2" onClick={openCreate}><Plus className="w-4 h-4" /> Add Grade</Button>
+          </div>
         </div>
 
         <Card className="rounded-xl shadow-card">

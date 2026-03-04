@@ -7,7 +7,8 @@ import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { Plus, Search, MoreHorizontal, Pencil, Trash2 } from "lucide-react";
+import { Plus, Search, MoreHorizontal, Pencil, Trash2, Download } from "lucide-react";
+import { downloadCSV } from "@/lib/csvExport";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { useSchoolQuery, useSchoolMutation } from "@/hooks/useSchoolData";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -63,7 +64,10 @@ const Students = () => {
             <h1 className="font-display text-2xl font-bold mb-1">Students</h1>
             <p className="text-muted-foreground text-sm">{students.length} students enrolled</p>
           </div>
-          <Button className="rounded-xl gap-2" onClick={openCreate}><Plus className="w-4 h-4" /> Add Student</Button>
+          <div className="flex gap-2">
+            <Button variant="outline" className="rounded-xl gap-2" onClick={() => downloadCSV(students.map(({ id, school_id, ...rest }) => rest), "students")} disabled={students.length === 0}><Download className="w-4 h-4" /> Export CSV</Button>
+            <Button className="rounded-xl gap-2" onClick={openCreate}><Plus className="w-4 h-4" /> Add Student</Button>
+          </div>
         </div>
 
         <Card className="rounded-xl shadow-card">
