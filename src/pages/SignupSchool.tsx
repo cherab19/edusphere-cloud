@@ -2,7 +2,7 @@ import { GraduationCap, School, User, Mail, Lock, ArrowRight, ArrowLeft, Check, 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link, useNavigate, Navigate } from "react-router-dom";
+import { Link, useNavigate, Navigate, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
@@ -15,8 +15,12 @@ const plans = [
 ];
 
 const SignupSchool = () => {
+  const [searchParams] = useSearchParams();
+  const planFromUrl = searchParams.get("plan");
+  const validPlans = ["starter", "pro", "enterprise"];
+  const initialPlan = planFromUrl && validPlans.includes(planFromUrl) ? planFromUrl : "pro";
   const [step, setStep] = useState(1);
-  const [selectedPlan, setSelectedPlan] = useState("pro");
+  const [selectedPlan, setSelectedPlan] = useState(initialPlan);
   const [schoolName, setSchoolName] = useState("");
   const [schoolEmail, setSchoolEmail] = useState("");
   const [schoolPhone, setSchoolPhone] = useState("");

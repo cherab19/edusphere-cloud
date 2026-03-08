@@ -26,24 +26,24 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import NotificationBell from "@/components/notifications/NotificationBell";
 
-const menuItems = [
-  { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard" },
-  { label: "Students", icon: Users, href: "/students" },
-  { label: "Teachers", icon: GraduationCap, href: "/teachers" },
-  { label: "Classes", icon: Layers, href: "/classes" },
-  { label: "Subjects", icon: BookOpen, href: "/subjects" },
-  { label: "Timetable", icon: Calendar, href: "/timetable" },
-  { label: "Attendance", icon: ClipboardCheck, href: "/attendance" },
-  { label: "Grades", icon: BarChart3, href: "/grades" },
-  { label: "Exams", icon: FileSpreadsheet, href: "/exams" },
-  { label: "Report Cards", icon: FileText, href: "/report-cards" },
-  { label: "Fees", icon: DollarSign, href: "/fees" },
-  { label: "Finance", icon: PieChart, href: "/finance-dashboard" },
-  { label: "Library", icon: Library, href: "/library" },
-  { label: "Transport", icon: Bus, href: "/transport" },
-  { label: "Parent Portal", icon: Heart, href: "/parent-portal" },
-  { label: "Announcements", icon: Bell, href: "/announcements" },
-  { label: "Settings", icon: Settings, href: "/settings" },
+const allMenuItems = [
+  { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard", plans: ["starter", "pro", "enterprise"] },
+  { label: "Students", icon: Users, href: "/students", plans: ["starter", "pro", "enterprise"] },
+  { label: "Teachers", icon: GraduationCap, href: "/teachers", plans: ["starter", "pro", "enterprise"] },
+  { label: "Classes", icon: Layers, href: "/classes", plans: ["starter", "pro", "enterprise"] },
+  { label: "Subjects", icon: BookOpen, href: "/subjects", plans: ["starter", "pro", "enterprise"] },
+  { label: "Announcements", icon: Bell, href: "/announcements", plans: ["starter", "pro", "enterprise"] },
+  { label: "Timetable", icon: Calendar, href: "/timetable", plans: ["pro", "enterprise"] },
+  { label: "Attendance", icon: ClipboardCheck, href: "/attendance", plans: ["pro", "enterprise"] },
+  { label: "Grades", icon: BarChart3, href: "/grades", plans: ["pro", "enterprise"] },
+  { label: "Exams", icon: FileSpreadsheet, href: "/exams", plans: ["pro", "enterprise"] },
+  { label: "Report Cards", icon: FileText, href: "/report-cards", plans: ["pro", "enterprise"] },
+  { label: "Fees", icon: DollarSign, href: "/fees", plans: ["pro", "enterprise"] },
+  { label: "Finance", icon: PieChart, href: "/finance-dashboard", plans: ["pro", "enterprise"] },
+  { label: "Parent Portal", icon: Heart, href: "/parent-portal", plans: ["pro", "enterprise"] },
+  { label: "Library", icon: Library, href: "/library", plans: ["enterprise"] },
+  { label: "Transport", icon: Bus, href: "/transport", plans: ["enterprise"] },
+  { label: "Settings", icon: Settings, href: "/settings", plans: ["starter", "pro", "enterprise"] },
 ];
 
 interface DashboardLayoutProps {
@@ -55,7 +55,8 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { profile, roles, signOut } = useAuth();
+  const { profile, roles, signOut, subscriptionPlan } = useAuth();
+  const menuItems = allMenuItems.filter(item => !subscriptionPlan || item.plans.includes(subscriptionPlan));
 
   const handleSignOut = async () => {
     await signOut();
