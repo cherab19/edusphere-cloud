@@ -18,7 +18,10 @@ export function useSchoolQuery<T>(
         .select(options?.select ?? "*")
         .eq("school_id", schoolId)
         .order(options?.orderBy ?? "created_at", { ascending: false });
-      if (error) throw error;
+      if (error) {
+        toast({ title: "Failed to load data", description: error.message, variant: "destructive" });
+        throw error;
+      }
       return (data ?? []) as T[];
     },
     enabled: !!schoolId,
