@@ -23,6 +23,7 @@ import {
   Lock,
   Sparkles,
   ArrowRight,
+  UserPlus,
 } from "lucide-react";
 import { useState } from "react";
 import LockedFeatureModal from "@/components/layout/LockedFeatureModal";
