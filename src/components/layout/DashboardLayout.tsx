@@ -55,7 +55,8 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [mobileOpen, setMobileOpen] = useState(false);
   const location = useLocation();
   const navigate = useNavigate();
-  const { profile, roles, signOut } = useAuth();
+  const { profile, roles, signOut, subscriptionPlan } = useAuth();
+  const menuItems = allMenuItems.filter(item => !subscriptionPlan || item.plans.includes(subscriptionPlan));
 
   const handleSignOut = async () => {
     await signOut();
