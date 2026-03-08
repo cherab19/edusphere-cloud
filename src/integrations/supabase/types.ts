@@ -897,6 +897,17 @@ export type Database = {
         Args: { _school_id: string; _user_id: string }
         Returns: boolean
       }
+      complete_school_registration: {
+        Args: {
+          _admin_name: string
+          _plan: Database["public"]["Enums"]["subscription_plan"]
+          _school_email: string
+          _school_name: string
+          _school_phone: string
+          _user_id: string
+        }
+        Returns: string
+      }
       get_school_id: { Args: { _user_id: string }; Returns: string }
       has_role: {
         Args: {
