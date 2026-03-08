@@ -25,6 +25,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useState } from "react";
+import LockedFeatureModal from "@/components/layout/LockedFeatureModal";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import NotificationBell from "@/components/notifications/NotificationBell";
@@ -62,6 +63,7 @@ interface DashboardLayoutProps {
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [lockedModal, setLockedModal] = useState<{ name: string; plan: string } | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const { profile, roles, signOut, subscriptionPlan } = useAuth();
@@ -116,9 +118,10 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 return (
                   <Tooltip key={item.href}>
                     <TooltipTrigger asChild>
-                      <div
+                      <button
+                        onClick={() => setLockedModal({ name: item.label, plan: requiredPlan })}
                         className={cn(
-                          "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-not-allowed opacity-50",
+                          "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium opacity-50 hover:opacity-70 transition-opacity w-full text-left",
                           "text-sidebar-foreground"
                         )}
                       >
@@ -129,7 +132,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                             <Lock className="w-3.5 h-3.5 text-muted-foreground" />
                           </>
                         )}
-                      </div>
+                      </button>
                     </TooltipTrigger>
                     <TooltipContent side="right">
                       <p className="text-xs">Upgrade to <span className="font-semibold">{requiredPlan}</span> to unlock</p>
@@ -221,6 +224,13 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
           <main className="flex-1 p-6">{children}</main>
         </div>
+
+        <LockedFeatureModal
+          open={!!lockedModal}
+          onOpenChange={(open) => !open && setLockedModal(null)}
+          featureName={lockedModal?.name ?? ""}
+          requiredPlan={lockedModal?.plan ?? ""}
+        />
       </div>
     </TooltipProvider>
   );

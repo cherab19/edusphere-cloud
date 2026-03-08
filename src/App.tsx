@@ -29,6 +29,7 @@ import ParentPortal from "./pages/ParentPortal";
 import Timetable from "./pages/Timetable";
 import ExamManagement from "./pages/ExamManagement";
 import NotFound from "./pages/NotFound";
+import UpgradePlan from "./pages/UpgradePlan";
 
 const queryClient = new QueryClient();
 
@@ -63,6 +64,7 @@ const App = () => (
             <Route path="/timetable" element={<ProtectedRoute><Timetable /></ProtectedRoute>} />
             <Route path="/exams" element={<ProtectedRoute><ExamManagement /></ProtectedRoute>} />
             <Route path="/superadmin/dashboard" element={<ProtectedRoute allowedRoles={["super_admin"]}><SuperAdminDashboard /></ProtectedRoute>} />
+            <Route path="/upgrade" element={<ProtectedRoute><UpgradePlan /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
         </AuthProvider>
