@@ -5,7 +5,7 @@ import { Navigate } from "react-router-dom";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Card } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
-import { Loader2, School, Users, CreditCard, TrendingUp, Activity } from "lucide-react";
+import { Loader2, School, Users, TrendingUp, Activity } from "lucide-react";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 
 interface SchoolRow {
@@ -40,6 +40,7 @@ const SuperAdminDashboard = () => {
   const { roles, loading: authLoading } = useAuth();
   const [schools, setSchools] = useState<SchoolRow[]>([]);
   const [subscriptions, setSubscriptions] = useState<SubscriptionRow[]>([]);
+  const [totalUsers, setTotalUsers] = useState(0);
   const [loading, setLoading] = useState(true);
 
   const isSuperAdmin = roles.includes("super_admin");
@@ -48,12 +49,14 @@ const SuperAdminDashboard = () => {
     if (!isSuperAdmin) return;
 
     const fetchData = async () => {
-      const [schoolsRes, subsRes] = await Promise.all([
+      const [schoolsRes, subsRes, profilesRes] = await Promise.all([
         supabase.from("schools").select("*").order("created_at", { ascending: false }),
         supabase.from("subscriptions").select("*"),
+        supabase.from("profiles").select("id", { count: "exact", head: true }),
       ]);
       if (schoolsRes.data) setSchools(schoolsRes.data);
       if (subsRes.data) setSubscriptions(subsRes.data as SubscriptionRow[]);
+      if (profilesRes.count !== null) setTotalUsers(profilesRes.count);
       setLoading(false);
     };
 
@@ -74,7 +77,6 @@ const SuperAdminDashboard = () => {
 
   const subBySchool = new Map(subscriptions.map((s) => [s.school_id, s]));
 
-  // Stats
   const totalSchools = schools.length;
   const activeSubs = subscriptions.filter((s) => s.status === "active" || s.status === "trialing").length;
   const planCounts = subscriptions.reduce<Record<string, number>>((acc, s) => {
@@ -83,13 +85,11 @@ const SuperAdminDashboard = () => {
   }, {});
   const pieData = Object.entries(planCounts).map(([name, value]) => ({ name, value }));
 
-  // Revenue estimate
   const planPrices: Record<string, number> = { starter: 2500, pro: 5000, enterprise: 12000 };
   const monthlyRevenue = subscriptions
     .filter((s) => s.status === "active" || s.status === "trialing")
     .reduce((sum, s) => sum + (planPrices[s.plan] || 0), 0);
 
-  // Registrations by month (last 6 months)
   const now = new Date();
   const monthLabels: string[] = [];
   const monthCounts: number[] = [];
@@ -119,7 +119,6 @@ const SuperAdminDashboard = () => {
           </div>
         ) : (
           <>
-            {/* KPI Cards */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
               <Card className="p-5 rounded-xl shadow-card">
                 <div className="flex items-start justify-between">
@@ -158,7 +157,7 @@ const SuperAdminDashboard = () => {
                 <div className="flex items-start justify-between">
                   <div>
                     <p className="text-sm text-muted-foreground mb-1">Total Users</p>
-                    <p className="text-2xl font-display font-bold">{totalSchools}</p>
+                    <p className="text-2xl font-display font-bold">{totalUsers}</p>
                   </div>
                   <div className="w-10 h-10 rounded-xl bg-accent flex items-center justify-center">
                     <Users className="w-5 h-5 text-accent-foreground" />
@@ -167,7 +166,6 @@ const SuperAdminDashboard = () => {
               </Card>
             </div>
 
-            {/* Charts Row */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
               <Card className="lg:col-span-2 p-6 rounded-xl shadow-card">
                 <h3 className="font-display font-semibold text-lg mb-4">School Registrations</h3>
@@ -200,7 +198,6 @@ const SuperAdminDashboard = () => {
               </Card>
             </div>
 
-            {/* Schools Table */}
             <Card className="p-6 rounded-xl shadow-card">
               <h3 className="font-display font-semibold text-lg mb-4">Registered Schools</h3>
               <div className="overflow-x-auto">

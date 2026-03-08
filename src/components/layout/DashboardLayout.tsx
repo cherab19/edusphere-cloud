@@ -1,55 +1,47 @@
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import {
-  LayoutDashboard,
-  Users,
-  GraduationCap,
-  BookOpen,
-  Layers,
-  ClipboardCheck,
-  BarChart3,
-  FileText,
-  DollarSign,
-  PieChart,
-  Library,
-  Bus,
-  Bell,
-  Settings,
-  LogOut,
-  ChevronLeft,
-  Menu,
-  Calendar,
-  FileSpreadsheet,
-  Heart,
-  Lock,
-  Sparkles,
-  ArrowRight,
-  UserPlus,
+  LayoutDashboard, Users, GraduationCap, BookOpen, Layers, ClipboardCheck,
+  BarChart3, FileText, DollarSign, PieChart, Library, Bus, Bell, Settings,
+  LogOut, ChevronLeft, Menu, Calendar, FileSpreadsheet, Heart, Lock,
+  Sparkles, ArrowRight, UserPlus, ScrollText,
 } from "lucide-react";
 import { useState } from "react";
 import LockedFeatureModal from "@/components/layout/LockedFeatureModal";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import NotificationBell from "@/components/notifications/NotificationBell";
+import ThemeToggle from "@/components/theme/ThemeToggle";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
-const allMenuItems = [
+type AppRole = "super_admin" | "school_admin" | "teacher" | "student" | "parent" | "accountant" | "staff";
+
+interface MenuItem {
+  label: string;
+  icon: any;
+  href: string;
+  plans: string[];
+  allowedRoles?: AppRole[];
+}
+
+const allMenuItems: MenuItem[] = [
   { label: "Dashboard", icon: LayoutDashboard, href: "/dashboard", plans: ["starter", "pro", "enterprise"] },
-  { label: "Students", icon: Users, href: "/students", plans: ["starter", "pro", "enterprise"] },
-  { label: "Teachers", icon: GraduationCap, href: "/teachers", plans: ["starter", "pro", "enterprise"] },
-  { label: "Classes", icon: Layers, href: "/classes", plans: ["starter", "pro", "enterprise"] },
-  { label: "Subjects", icon: BookOpen, href: "/subjects", plans: ["starter", "pro", "enterprise"] },
+  { label: "Students", icon: Users, href: "/students", plans: ["starter", "pro", "enterprise"], allowedRoles: ["school_admin", "teacher", "staff"] },
+  { label: "Teachers", icon: GraduationCap, href: "/teachers", plans: ["starter", "pro", "enterprise"], allowedRoles: ["school_admin", "staff"] },
+  { label: "Classes", icon: Layers, href: "/classes", plans: ["starter", "pro", "enterprise"], allowedRoles: ["school_admin", "teacher", "staff"] },
+  { label: "Subjects", icon: BookOpen, href: "/subjects", plans: ["starter", "pro", "enterprise"], allowedRoles: ["school_admin", "teacher", "staff"] },
   { label: "Announcements", icon: Bell, href: "/announcements", plans: ["starter", "pro", "enterprise"] },
   { label: "Timetable", icon: Calendar, href: "/timetable", plans: ["pro", "enterprise"] },
-  { label: "Attendance", icon: ClipboardCheck, href: "/attendance", plans: ["pro", "enterprise"] },
-  { label: "Grades", icon: BarChart3, href: "/grades", plans: ["pro", "enterprise"] },
-  { label: "Exams", icon: FileSpreadsheet, href: "/exams", plans: ["pro", "enterprise"] },
-  { label: "Report Cards", icon: FileText, href: "/report-cards", plans: ["pro", "enterprise"] },
-  { label: "Fees", icon: DollarSign, href: "/fees", plans: ["pro", "enterprise"] },
-  { label: "Finance", icon: PieChart, href: "/finance-dashboard", plans: ["pro", "enterprise"] },
-  { label: "Parent Portal", icon: Heart, href: "/parent-portal", plans: ["pro", "enterprise"] },
+  { label: "Attendance", icon: ClipboardCheck, href: "/attendance", plans: ["pro", "enterprise"], allowedRoles: ["school_admin", "teacher", "staff"] },
+  { label: "Grades", icon: BarChart3, href: "/grades", plans: ["pro", "enterprise"], allowedRoles: ["school_admin", "teacher", "student", "parent"] },
+  { label: "Exams", icon: FileSpreadsheet, href: "/exams", plans: ["pro", "enterprise"], allowedRoles: ["school_admin", "teacher"] },
+  { label: "Report Cards", icon: FileText, href: "/report-cards", plans: ["pro", "enterprise"], allowedRoles: ["school_admin", "teacher", "student", "parent"] },
+  { label: "Fees", icon: DollarSign, href: "/fees", plans: ["pro", "enterprise"], allowedRoles: ["school_admin", "accountant"] },
+  { label: "Finance", icon: PieChart, href: "/finance-dashboard", plans: ["pro", "enterprise"], allowedRoles: ["school_admin", "accountant"] },
+  { label: "Parent Portal", icon: Heart, href: "/parent-portal", plans: ["pro", "enterprise"], allowedRoles: ["school_admin", "parent"] },
   { label: "Library", icon: Library, href: "/library", plans: ["enterprise"] },
   { label: "Transport", icon: Bus, href: "/transport", plans: ["enterprise"] },
-  { label: "Invite Users", icon: UserPlus, href: "/invite-users", plans: ["starter", "pro", "enterprise"] },
+  { label: "Invite Users", icon: UserPlus, href: "/invite-users", plans: ["starter", "pro", "enterprise"], allowedRoles: ["school_admin"] },
+  { label: "Audit Logs", icon: ScrollText, href: "/audit-logs", plans: ["starter", "pro", "enterprise"], allowedRoles: ["school_admin"] },
   { label: "Settings", icon: Settings, href: "/settings", plans: ["starter", "pro", "enterprise"] },
 ];
 
@@ -75,17 +67,23 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
     navigate("/login");
   };
 
-  const schoolName = profile?.full_name ? `${profile.full_name}'s School` : "My School";
   const initials = profile?.full_name
     ? profile.full_name.split(" ").map((n) => n[0]).join("").slice(0, 2).toUpperCase()
     : "??";
   const primaryRole = roles[0] ?? "user";
   const displayRole = primaryRole.replace("_", " ").replace(/\b\w/g, (c) => c.toUpperCase());
 
-  const isLocked = (item: typeof allMenuItems[0]) =>
+  const isLocked = (item: MenuItem) =>
     subscriptionPlan ? !item.plans.includes(subscriptionPlan) : false;
 
+  const isVisible = (item: MenuItem) => {
+    if (!item.allowedRoles) return true;
+    return roles.some((r) => item.allowedRoles!.includes(r as AppRole));
+  };
+
   const upgradeTo = subscriptionPlan ? planLabel[subscriptionPlan] : null;
+
+  const visibleItems = allMenuItems.filter(isVisible);
 
   return (
     <TooltipProvider delayDuration={300}>
@@ -111,7 +109,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
           </div>
 
           <nav className="flex-1 py-4 px-3 space-y-1 overflow-y-auto">
-            {allMenuItems.map((item) => {
+            {visibleItems.map((item) => {
               const locked = isLocked(item);
               const isActive = !locked && location.pathname === item.href;
 
@@ -192,6 +190,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               </div>
             </div>
             <div className="flex items-center gap-3">
+              <ThemeToggle />
               <NotificationBell />
               <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-sm font-semibold">
                 {initials}
@@ -199,7 +198,6 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             </div>
           </header>
 
-          {/* Upgrade Banner */}
           {upgradeTo && (
             <div className="mx-6 mt-4">
               <div className="flex items-center gap-3 rounded-xl bg-primary/10 border border-primary/20 px-5 py-3">
