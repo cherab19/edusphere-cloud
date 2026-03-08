@@ -31,6 +31,7 @@ import Timetable from "./pages/Timetable";
 import ExamManagement from "./pages/ExamManagement";
 import NotFound from "./pages/NotFound";
 import UpgradePlan from "./pages/UpgradePlan";
+import InviteUsers from "./pages/InviteUsers";
 
 const queryClient = new QueryClient({
   defaultOptions: {
