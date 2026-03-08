@@ -17,6 +17,9 @@ import {
   LogOut,
   ChevronLeft,
   Menu,
+  Calendar,
+  FileSpreadsheet,
+  Heart,
 } from "lucide-react";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
@@ -28,13 +31,16 @@ const menuItems = [
   { label: "Teachers", icon: GraduationCap, href: "/teachers" },
   { label: "Classes", icon: Layers, href: "/classes" },
   { label: "Subjects", icon: BookOpen, href: "/subjects" },
+  { label: "Timetable", icon: Calendar, href: "/timetable" },
   { label: "Attendance", icon: ClipboardCheck, href: "/attendance" },
   { label: "Grades", icon: BarChart3, href: "/grades" },
+  { label: "Exams", icon: FileSpreadsheet, href: "/exams" },
   { label: "Report Cards", icon: FileText, href: "/report-cards" },
   { label: "Fees", icon: DollarSign, href: "/fees" },
   { label: "Finance", icon: PieChart, href: "/finance-dashboard" },
   { label: "Library", icon: Library, href: "/library" },
   { label: "Transport", icon: Bus, href: "/transport" },
+  { label: "Parent Portal", icon: Heart, href: "/parent-portal" },
   { label: "Announcements", icon: Bell, href: "/announcements" },
   { label: "Settings", icon: Settings, href: "/settings" },
 ];

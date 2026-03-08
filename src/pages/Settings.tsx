@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import DashboardLayout from "@/components/layout/DashboardLayout";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -7,7 +7,7 @@ import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
-import { School, Phone, Mail, MapPin, Save, Check, Crown } from "lucide-react";
+import { School, Phone, Mail, MapPin, Save, Check, Crown, Upload, Image } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
 import { useToast } from "@/hooks/use-toast";
@@ -40,6 +40,7 @@ const Settings = () => {
   const { schoolId } = useAuth();
   const { toast } = useToast();
   const qc = useQueryClient();
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const { data: school, isLoading: schoolLoading } = useQuery({
     queryKey: ["school_settings", schoolId],
@@ -64,6 +65,7 @@ const Settings = () => {
   });
 
   const [form, setForm] = useState({ name: "", email: "", phone: "", address: "" });
+  const [uploading, setUploading] = useState(false);
 
   useEffect(() => {
     if (school) {
@@ -95,6 +97,44 @@ const Settings = () => {
     },
     onError: (e: any) => toast({ title: "Error", description: e.message, variant: "destructive" }),
   });
+
+  const handleLogoUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file || !schoolId) return;
+
+    if (!file.type.startsWith("image/")) {
+      toast({ title: "Invalid file", description: "Please upload an image file.", variant: "destructive" });
+      return;
+    }
+
+    setUploading(true);
+    try {
+      const ext = file.name.split(".").pop();
+      const filePath = `${schoolId}/logo.${ext}`;
+
+      const { error: uploadError } = await supabase.storage
+        .from("school-logos")
+        .upload(filePath, file, { upsert: true });
+      if (uploadError) throw uploadError;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from("school-logos")
+        .getPublicUrl(filePath);
+
+      const { error: updateError } = await supabase
+        .from("schools")
+        .update({ logo_url: publicUrl })
+        .eq("id", schoolId);
+      if (updateError) throw updateError;
+
+      qc.invalidateQueries({ queryKey: ["school_settings"] });
+      toast({ title: "Logo uploaded", description: "Your school logo has been updated." });
+    } catch (err: any) {
+      toast({ title: "Upload failed", description: err.message, variant: "destructive" });
+    } finally {
+      setUploading(false);
+    }
+  };
 
   const updatePlan = useMutation({
     mutationFn: async (plan: string) => {
@@ -134,7 +174,41 @@ const Settings = () => {
             <TabsTrigger value="subscription" className="rounded-lg">Subscription</TabsTrigger>
           </TabsList>
 
-          <TabsContent value="school" className="mt-6">
+          <TabsContent value="school" className="mt-6 space-y-6">
+            {/* Logo Upload */}
+            <Card className="p-6 rounded-xl shadow-card">
+              <h3 className="font-display font-semibold text-lg mb-4">School Logo</h3>
+              <div className="flex items-center gap-6">
+                <div className="w-20 h-20 rounded-xl bg-muted flex items-center justify-center overflow-hidden border-2 border-dashed border-border">
+                  {school?.logo_url ? (
+                    <img src={school.logo_url} alt="School logo" className="w-full h-full object-cover" />
+                  ) : (
+                    <Image className="w-8 h-8 text-muted-foreground" />
+                  )}
+                </div>
+                <div>
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    className="hidden"
+                    onChange={handleLogoUpload}
+                  />
+                  <Button
+                    variant="outline"
+                    className="rounded-xl gap-2"
+                    onClick={() => fileInputRef.current?.click()}
+                    disabled={uploading}
+                  >
+                    <Upload className="w-4 h-4" />
+                    {uploading ? "Uploading…" : "Upload Logo"}
+                  </Button>
+                  <p className="text-xs text-muted-foreground mt-2">PNG, JPG, or SVG. Max 2MB.</p>
+                </div>
+              </div>
+            </Card>
+
+            {/* School Info Form */}
             <Card className="p-6 rounded-xl shadow-card">
               <h3 className="font-display font-semibold text-lg mb-6">School Information</h3>
               <div className="space-y-5">
