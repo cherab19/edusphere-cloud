@@ -12,6 +12,8 @@ import { Plus, Bell, Calendar, Pencil, Trash2 } from "lucide-react";
 import { useSchoolQuery, useSchoolMutation } from "@/hooks/useSchoolData";
 import { useAuth } from "@/contexts/AuthContext";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/hooks/use-toast";
+import { sendNotification } from "@/lib/notifications";
 
 interface Announcement { id: string; title: string; content: string; target_audience: string; created_at: string; created_by: string | null; school_id: string; }
 
