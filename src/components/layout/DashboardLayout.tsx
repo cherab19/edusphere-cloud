@@ -148,10 +148,6 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
               {initials}
             </div>
           </div>
-            <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-primary-foreground text-sm font-semibold">
-              {initials}
-            </div>
-          </div>
         </header>
 
         <main className="flex-1 p-6">{children}</main>
