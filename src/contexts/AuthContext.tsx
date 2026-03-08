@@ -84,6 +84,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(session?.user ?? null);
 
         if (session?.user) {
+          // If user signed up via invite, accept the invitation
+          if (event === "SIGNED_IN" || event === "USER_UPDATED") {
+            const meta = session.user.user_metadata;
+            if (meta?.invited_school_id && meta?.invited_role) {
+              await supabase.rpc("accept_invitation", {
+                _user_id: session.user.id,
+                _email: session.user.email!,
+              });
+            }
+          }
           setTimeout(() => fetchUserData(session.user.id), 0);
         } else {
           setProfile(null);
