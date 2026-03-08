@@ -118,9 +118,10 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                 return (
                   <Tooltip key={item.href}>
                     <TooltipTrigger asChild>
-                      <div
+                      <button
+                        onClick={() => setLockedModal({ name: item.label, plan: requiredPlan })}
                         className={cn(
-                          "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium cursor-not-allowed opacity-50",
+                          "flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium opacity-50 hover:opacity-70 transition-opacity w-full text-left",
                           "text-sidebar-foreground"
                         )}
                       >
@@ -131,7 +132,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
                             <Lock className="w-3.5 h-3.5 text-muted-foreground" />
                           </>
                         )}
-                      </div>
+                      </button>
                     </TooltipTrigger>
                     <TooltipContent side="right">
                       <p className="text-xs">Upgrade to <span className="font-semibold">{requiredPlan}</span> to unlock</p>
