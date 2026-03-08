@@ -15,8 +15,12 @@ const plans = [
 ];
 
 const SignupSchool = () => {
+  const [searchParams] = useSearchParams();
+  const planFromUrl = searchParams.get("plan");
+  const validPlans = ["starter", "pro", "enterprise"];
+  const initialPlan = planFromUrl && validPlans.includes(planFromUrl) ? planFromUrl : "pro";
   const [step, setStep] = useState(1);
-  const [selectedPlan, setSelectedPlan] = useState("pro");
+  const [selectedPlan, setSelectedPlan] = useState(initialPlan);
   const [schoolName, setSchoolName] = useState("");
   const [schoolEmail, setSchoolEmail] = useState("");
   const [schoolPhone, setSchoolPhone] = useState("");

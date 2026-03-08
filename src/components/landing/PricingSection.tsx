@@ -114,7 +114,7 @@ const PricingSection = () => {
                 className={`w-full rounded-xl h-11 ${plan.popular ? "" : "variant-outline"}`}
                 variant={plan.popular ? "default" : "outline"}
               >
-                <Link to="/signup-school">Get Started</Link>
+                <Link to={`/signup-school?plan=${plan.name.toLowerCase()}`}>Get Started</Link>
               </Button>
             </motion.div>
           ))}
