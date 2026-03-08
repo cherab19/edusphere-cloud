@@ -29,6 +29,7 @@ import ParentPortal from "./pages/ParentPortal";
 import Timetable from "./pages/Timetable";
 import ExamManagement from "./pages/ExamManagement";
 import NotFound from "./pages/NotFound";
+import UpgradePlan from "./pages/UpgradePlan";
 
 const queryClient = new QueryClient();
 
