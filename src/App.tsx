@@ -31,6 +31,7 @@ import Timetable from "./pages/Timetable";
 import ExamManagement from "./pages/ExamManagement";
 import NotFound from "./pages/NotFound";
 import UpgradePlan from "./pages/UpgradePlan";
+import InviteUsers from "./pages/InviteUsers";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -78,6 +79,7 @@ const App = () => (
             <Route path="/exams" element={<ProtectedRoute><ExamManagement /></ProtectedRoute>} />
             <Route path="/superadmin/dashboard" element={<ProtectedRoute allowedRoles={["super_admin"]}><SuperAdminDashboard /></ProtectedRoute>} />
             <Route path="/upgrade" element={<ProtectedRoute><UpgradePlan /></ProtectedRoute>} />
+            <Route path="/invite-users" element={<ProtectedRoute allowedRoles={["school_admin"]}><InviteUsers /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
           </ErrorBoundary>

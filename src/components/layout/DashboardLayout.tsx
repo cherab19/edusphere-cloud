@@ -23,6 +23,7 @@ import {
   Lock,
   Sparkles,
   ArrowRight,
+  UserPlus,
 } from "lucide-react";
 import { useState } from "react";
 import LockedFeatureModal from "@/components/layout/LockedFeatureModal";
@@ -48,6 +49,7 @@ const allMenuItems = [
   { label: "Parent Portal", icon: Heart, href: "/parent-portal", plans: ["pro", "enterprise"] },
   { label: "Library", icon: Library, href: "/library", plans: ["enterprise"] },
   { label: "Transport", icon: Bus, href: "/transport", plans: ["enterprise"] },
+  { label: "Invite Users", icon: UserPlus, href: "/invite-users", plans: ["starter", "pro", "enterprise"] },
   { label: "Settings", icon: Settings, href: "/settings", plans: ["starter", "pro", "enterprise"] },
 ];
 
