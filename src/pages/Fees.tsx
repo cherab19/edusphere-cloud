@@ -99,6 +99,9 @@ const Fees = () => {
             <p className="text-muted-foreground text-sm">Track student fee payments</p>
           </div>
           <div className="flex gap-2">
+            <Button variant="outline" className="rounded-xl gap-2" onClick={sendFeeReminders} disabled={sendingReminders || fees.filter(f => f.status !== "paid").length === 0}>
+              <Bell className="w-4 h-4" /> {sendingReminders ? "Sending…" : "Send Reminders"}
+            </Button>
             <Button variant="outline" className="rounded-xl gap-2" onClick={() => downloadCSV(fees.map((f) => ({ Student: studentName(f.student_id), Grade: studentGrade(f.student_id), Total: f.total_due, Paid: f.paid_amount, Status: f.status, DueDate: f.due_date ?? "", Description: f.description ?? "" })), "fees")} disabled={fees.length === 0}><Download className="w-4 h-4" /> Export CSV</Button>
             <Button className="rounded-xl gap-2" onClick={openCreate}><Plus className="w-4 h-4" /> Record Payment</Button>
           </div>
