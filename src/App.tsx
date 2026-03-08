@@ -25,6 +25,9 @@ import Transport from "./pages/Transport";
 import Announcements from "./pages/Announcements";
 import SuperAdminDashboard from "./pages/SuperAdminDashboard";
 import Settings from "./pages/Settings";
+import ParentPortal from "./pages/ParentPortal";
+import Timetable from "./pages/Timetable";
+import ExamManagement from "./pages/ExamManagement";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -56,6 +59,9 @@ const App = () => (
             <Route path="/transport" element={<ProtectedRoute><Transport /></ProtectedRoute>} />
             <Route path="/announcements" element={<ProtectedRoute><Announcements /></ProtectedRoute>} />
             <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
+            <Route path="/parent-portal" element={<ProtectedRoute><ParentPortal /></ProtectedRoute>} />
+            <Route path="/timetable" element={<ProtectedRoute><Timetable /></ProtectedRoute>} />
+            <Route path="/exams" element={<ProtectedRoute><ExamManagement /></ProtectedRoute>} />
             <Route path="/superadmin/dashboard" element={<ProtectedRoute allowedRoles={["super_admin"]}><SuperAdminDashboard /></ProtectedRoute>} />
             <Route path="*" element={<NotFound />} />
           </Routes>
