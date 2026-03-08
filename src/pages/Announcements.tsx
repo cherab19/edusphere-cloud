@@ -29,7 +29,8 @@ const emptyForm = { title: "", content: "", target_audience: "all" };
 const Announcements = () => {
   const { data: announcements = [], isLoading } = useSchoolQuery<Announcement>("announcements", "announcements");
   const { insert, update, remove } = useSchoolMutation("announcements", "announcements");
-  const { user } = useAuth();
+  const { user, schoolId } = useAuth();
+  const { toast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [editing, setEditing] = useState<Announcement | null>(null);
