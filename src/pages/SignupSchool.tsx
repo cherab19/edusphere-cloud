@@ -2,7 +2,7 @@ import { GraduationCap, School, User, Mail, Lock, ArrowRight, ArrowLeft, Check, 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Link, useNavigate, Navigate } from "react-router-dom";
+import { Link, useNavigate, Navigate, useSearchParams } from "react-router-dom";
 import { useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { useAuth } from "@/contexts/AuthContext";
