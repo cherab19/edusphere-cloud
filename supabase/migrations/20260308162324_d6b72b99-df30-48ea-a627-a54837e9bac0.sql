@@ -1,0 +1,1 @@
+DELETE FROM auth.users WHERE email = 'freshtest99@mailinator.com';

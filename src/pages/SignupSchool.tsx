@@ -48,6 +48,9 @@ const SignupSchool = () => {
     // Step 3: Create account + school + profile + role + subscription
     setLoading(true);
     try {
+      // Sign out any existing session first
+      await supabase.auth.signOut();
+
       // 1. Sign up user
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: adminEmail,
@@ -60,37 +63,17 @@ const SignupSchool = () => {
 
       const userId = authData.user.id;
 
-      // 2. Create school
-      const { data: schoolData, error: schoolError } = await supabase
-        .from("schools")
-        .insert({ name: schoolName, email: schoolEmail || adminEmail, phone: schoolPhone })
-        .select("id")
-        .single();
+      // 2. Complete registration atomically via database function
+      const { error: regError } = await supabase.rpc("complete_school_registration", {
+        _user_id: userId,
+        _school_name: schoolName,
+        _school_email: schoolEmail || adminEmail,
+        _school_phone: schoolPhone || "",
+        _admin_name: adminName,
+        _plan: selectedPlan as "starter" | "pro" | "enterprise",
+      });
 
-      if (schoolError) throw schoolError;
-
-      const schoolId = schoolData.id;
-
-      // 3. Create profile
-      const { error: profileError } = await supabase
-        .from("profiles")
-        .insert({ user_id: userId, school_id: schoolId, full_name: adminName });
-
-      if (profileError) throw profileError;
-
-      // 4. Assign school_admin role
-      const { error: roleError } = await supabase
-        .from("user_roles")
-        .insert({ user_id: userId, role: "school_admin" });
-
-      if (roleError) throw roleError;
-
-      // 5. Create subscription
-      const { error: subError } = await supabase
-        .from("subscriptions")
-        .insert({ school_id: schoolId, plan: selectedPlan as any, status: "trialing" });
-
-      if (subError) throw subError;
+      if (regError) throw regError;
 
       toast({
         title: "School registered!",
