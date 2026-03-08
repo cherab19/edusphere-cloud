@@ -224,6 +224,13 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
           <main className="flex-1 p-6">{children}</main>
         </div>
+
+        <LockedFeatureModal
+          open={!!lockedModal}
+          onOpenChange={(open) => !open && setLockedModal(null)}
+          featureName={lockedModal?.name ?? ""}
+          requiredPlan={lockedModal?.plan ?? ""}
+        />
       </div>
     </TooltipProvider>
   );
