@@ -32,11 +32,38 @@ const Fees = () => {
   const { data: fees = [], isLoading } = useSchoolQuery<Fee>("fees", "fees");
   const { data: students = [] } = useSchoolQuery<Student>("students", "students");
   const { insert, update, remove } = useSchoolMutation("fees", "fees");
+  const { schoolId } = useAuth();
+  const { toast } = useToast();
   const [search, setSearch] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [editing, setEditing] = useState<Fee | null>(null);
   const [form, setForm] = useState(emptyForm);
+  const [sendingReminders, setSendingReminders] = useState(false);
+
+  const sendFeeReminders = async () => {
+    if (!schoolId) return;
+    setSendingReminders(true);
+    try {
+      const unpaidFees = fees.filter(f => f.status !== "paid");
+      const studentIds = [...new Set(unpaidFees.map(f => f.student_id))];
+      // Get user_ids for students who have accounts
+      const studentsWithUsers = students.filter(s => studentIds.includes(s.id));
+
+      await sendNotification({
+        schoolId,
+        title: "💰 Fee Payment Reminder",
+        message: "You have outstanding fees. Please check the Fees section for details.",
+        type: "fee_reminder",
+        link: "/fees",
+      });
+      toast({ title: "Reminders sent", description: `Notified all school members about pending fees.` });
+    } catch {
+      toast({ title: "Error", description: "Failed to send reminders.", variant: "destructive" });
+    } finally {
+      setSendingReminders(false);
+    }
+  };
 
   const studentName = (id: string) => students.find((s) => s.id === id)?.full_name ?? "—";
   const studentGrade = (id: string) => students.find((s) => s.id === id)?.grade_class ?? "—";
