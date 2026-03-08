@@ -70,7 +70,7 @@ const SignupSchool = () => {
         _school_email: schoolEmail || adminEmail,
         _school_phone: schoolPhone || "",
         _admin_name: adminName,
-        _plan: selectedPlan,
+        _plan: selectedPlan as "starter" | "pro" | "enterprise",
       });
 
       if (regError) throw regError;
