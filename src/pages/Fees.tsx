@@ -7,12 +7,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { DollarSign, Plus, Search, MoreHorizontal, Pencil, Trash2, Download } from "lucide-react";
+import { DollarSign, Plus, Search, MoreHorizontal, Pencil, Trash2, Download, Bell } from "lucide-react";
 import { downloadCSV } from "@/lib/csvExport";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useSchoolQuery, useSchoolMutation } from "@/hooks/useSchoolData";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import { sendNotification } from "@/lib/notifications";
 
 interface Fee { id: string; student_id: string; total_due: number; paid_amount: number; status: string; due_date: string | null; description: string | null; school_id: string; }
 interface Student { id: string; full_name: string; grade_class: string | null; }
@@ -29,11 +32,38 @@ const Fees = () => {
   const { data: fees = [], isLoading } = useSchoolQuery<Fee>("fees", "fees");
   const { data: students = [] } = useSchoolQuery<Student>("students", "students");
   const { insert, update, remove } = useSchoolMutation("fees", "fees");
+  const { schoolId } = useAuth();
+  const { toast } = useToast();
   const [search, setSearch] = useState("");
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [editing, setEditing] = useState<Fee | null>(null);
   const [form, setForm] = useState(emptyForm);
+  const [sendingReminders, setSendingReminders] = useState(false);
+
+  const sendFeeReminders = async () => {
+    if (!schoolId) return;
+    setSendingReminders(true);
+    try {
+      const unpaidFees = fees.filter(f => f.status !== "paid");
+      const studentIds = [...new Set(unpaidFees.map(f => f.student_id))];
+      // Get user_ids for students who have accounts
+      const studentsWithUsers = students.filter(s => studentIds.includes(s.id));
+
+      await sendNotification({
+        schoolId,
+        title: "💰 Fee Payment Reminder",
+        message: "You have outstanding fees. Please check the Fees section for details.",
+        type: "fee_reminder",
+        link: "/fees",
+      });
+      toast({ title: "Reminders sent", description: `Notified all school members about pending fees.` });
+    } catch {
+      toast({ title: "Error", description: "Failed to send reminders.", variant: "destructive" });
+    } finally {
+      setSendingReminders(false);
+    }
+  };
 
   const studentName = (id: string) => students.find((s) => s.id === id)?.full_name ?? "—";
   const studentGrade = (id: string) => students.find((s) => s.id === id)?.grade_class ?? "—";
@@ -69,6 +99,9 @@ const Fees = () => {
             <p className="text-muted-foreground text-sm">Track student fee payments</p>
           </div>
           <div className="flex gap-2">
+            <Button variant="outline" className="rounded-xl gap-2" onClick={sendFeeReminders} disabled={sendingReminders || fees.filter(f => f.status !== "paid").length === 0}>
+              <Bell className="w-4 h-4" /> {sendingReminders ? "Sending…" : "Send Reminders"}
+            </Button>
             <Button variant="outline" className="rounded-xl gap-2" onClick={() => downloadCSV(fees.map((f) => ({ Student: studentName(f.student_id), Grade: studentGrade(f.student_id), Total: f.total_due, Paid: f.paid_amount, Status: f.status, DueDate: f.due_date ?? "", Description: f.description ?? "" })), "fees")} disabled={fees.length === 0}><Download className="w-4 h-4" /> Export CSV</Button>
             <Button className="rounded-xl gap-2" onClick={openCreate}><Plus className="w-4 h-4" /> Record Payment</Button>
           </div>

@@ -12,6 +12,8 @@ import { Plus, Bell, Calendar, Pencil, Trash2 } from "lucide-react";
 import { useSchoolQuery, useSchoolMutation } from "@/hooks/useSchoolData";
 import { useAuth } from "@/contexts/AuthContext";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useToast } from "@/hooks/use-toast";
+import { sendNotification } from "@/lib/notifications";
 
 interface Announcement { id: string; title: string; content: string; target_audience: string; created_at: string; created_by: string | null; school_id: string; }
 
@@ -27,7 +29,8 @@ const emptyForm = { title: "", content: "", target_audience: "all" };
 const Announcements = () => {
   const { data: announcements = [], isLoading } = useSchoolQuery<Announcement>("announcements", "announcements");
   const { insert, update, remove } = useSchoolMutation("announcements", "announcements");
-  const { user } = useAuth();
+  const { user, schoolId } = useAuth();
+  const { toast } = useToast();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [deleteId, setDeleteId] = useState<string | null>(null);
   const [editing, setEditing] = useState<Announcement | null>(null);
@@ -42,8 +45,26 @@ const Announcements = () => {
 
   const handleSubmit = async () => {
     const vals = { ...form, created_by: user?.id ?? null };
-    if (editing) await update.mutateAsync({ id: editing.id, ...vals });
-    else await insert.mutateAsync(vals);
+    if (editing) {
+      await update.mutateAsync({ id: editing.id, ...vals });
+    } else {
+      await insert.mutateAsync(vals);
+      // Send in-app notification to all school members
+      if (schoolId) {
+        try {
+          await sendNotification({
+            schoolId,
+            title: `📢 ${form.title}`,
+            message: form.content.slice(0, 100) + (form.content.length > 100 ? "…" : ""),
+            type: "announcement",
+            link: "/announcements",
+          });
+          toast({ title: "Announcement published", description: "All school members have been notified." });
+        } catch {
+          toast({ title: "Published", description: "Announcement saved but some notifications may have failed." });
+        }
+      }
+    }
     setDialogOpen(false);
   };
 
