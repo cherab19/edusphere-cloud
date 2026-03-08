@@ -4,6 +4,7 @@ import { supabase } from "@/integrations/supabase/client";
 import type { Database } from "@/integrations/supabase/types";
 
 type AppRole = "super_admin" | "school_admin" | "teacher" | "student" | "parent" | "accountant" | "staff";
+type SubscriptionPlan = "starter" | "pro" | "enterprise";
 
 interface Profile {
   id: string;
@@ -20,6 +21,7 @@ interface AuthContextType {
   profile: Profile | null;
   roles: AppRole[];
   schoolId: string | null;
+  subscriptionPlan: SubscriptionPlan | null;
   loading: boolean;
   signOut: () => Promise<void>;
 }
@@ -30,6 +32,7 @@ const AuthContext = createContext<AuthContextType>({
   profile: null,
   roles: [],
   schoolId: null,
+  subscriptionPlan: null,
   loading: true,
   signOut: async () => {},
 });
@@ -41,6 +44,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [profile, setProfile] = useState<Profile | null>(null);
   const [roles, setRoles] = useState<AppRole[]>([]);
+  const [subscriptionPlan, setSubscriptionPlan] = useState<SubscriptionPlan | null>(null);
   const [loading, setLoading] = useState(true);
 
   const fetchUserData = async (userId: string) => {
@@ -51,7 +55,19 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       ]);
 
       if (profileRes.data) {
-        setProfile(profileRes.data as unknown as Profile);
+        const p = profileRes.data as unknown as Profile;
+        setProfile(p);
+
+        // Fetch subscription for the school
+        const { data: subData } = await supabase
+          .from("subscriptions")
+          .select("plan")
+          .eq("school_id", p.school_id)
+          .single();
+
+        if (subData) {
+          setSubscriptionPlan(subData.plan as SubscriptionPlan);
+        }
       }
       if (rolesRes.data) {
         setRoles(rolesRes.data.map((r: any) => r.role as AppRole));
@@ -68,11 +84,11 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(session?.user ?? null);
 
         if (session?.user) {
-          // Defer to avoid Supabase client deadlock
           setTimeout(() => fetchUserData(session.user.id), 0);
         } else {
           setProfile(null);
           setRoles([]);
+          setSubscriptionPlan(null);
         }
         setLoading(false);
       }
@@ -94,6 +110,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     await supabase.auth.signOut();
     setProfile(null);
     setRoles([]);
+    setSubscriptionPlan(null);
   };
 
   return (
@@ -104,6 +121,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         profile,
         roles,
         schoolId: profile?.school_id ?? null,
+        subscriptionPlan,
         loading,
         signOut,
       }}
