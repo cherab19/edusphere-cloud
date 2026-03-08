@@ -48,6 +48,9 @@ const SignupSchool = () => {
     // Step 3: Create account + school + profile + role + subscription
     setLoading(true);
     try {
+      // Sign out any existing session first
+      await supabase.auth.signOut();
+
       // 1. Sign up user
       const { data: authData, error: authError } = await supabase.auth.signUp({
         email: adminEmail,
