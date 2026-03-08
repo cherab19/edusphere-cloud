@@ -25,6 +25,9 @@ import Transport from "./pages/Transport";
 import Announcements from "./pages/Announcements";
 import SuperAdminDashboard from "./pages/SuperAdminDashboard";
 import Settings from "./pages/Settings";
+import ParentPortal from "./pages/ParentPortal";
+import Timetable from "./pages/Timetable";
+import ExamManagement from "./pages/ExamManagement";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
