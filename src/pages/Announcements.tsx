@@ -45,8 +45,26 @@ const Announcements = () => {
 
   const handleSubmit = async () => {
     const vals = { ...form, created_by: user?.id ?? null };
-    if (editing) await update.mutateAsync({ id: editing.id, ...vals });
-    else await insert.mutateAsync(vals);
+    if (editing) {
+      await update.mutateAsync({ id: editing.id, ...vals });
+    } else {
+      await insert.mutateAsync(vals);
+      // Send in-app notification to all school members
+      if (schoolId) {
+        try {
+          await sendNotification({
+            schoolId,
+            title: `📢 ${form.title}`,
+            message: form.content.slice(0, 100) + (form.content.length > 100 ? "…" : ""),
+            type: "announcement",
+            link: "/announcements",
+          });
+          toast({ title: "Announcement published", description: "All school members have been notified." });
+        } catch {
+          toast({ title: "Published", description: "Announcement saved but some notifications may have failed." });
+        }
+      }
+    }
     setDialogOpen(false);
   };
 
