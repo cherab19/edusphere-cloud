@@ -63,6 +63,7 @@ interface DashboardLayoutProps {
 const DashboardLayout = ({ children }: DashboardLayoutProps) => {
   const [collapsed, setCollapsed] = useState(false);
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [lockedModal, setLockedModal] = useState<{ name: string; plan: string } | null>(null);
   const location = useLocation();
   const navigate = useNavigate();
   const { profile, roles, signOut, subscriptionPlan } = useAuth();
