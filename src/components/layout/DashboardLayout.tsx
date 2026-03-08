@@ -25,6 +25,7 @@ import {
   ArrowRight,
 } from "lucide-react";
 import { useState } from "react";
+import LockedFeatureModal from "@/components/layout/LockedFeatureModal";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import NotificationBell from "@/components/notifications/NotificationBell";
