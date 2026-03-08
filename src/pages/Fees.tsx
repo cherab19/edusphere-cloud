@@ -7,12 +7,15 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
-import { DollarSign, Plus, Search, MoreHorizontal, Pencil, Trash2, Download } from "lucide-react";
+import { DollarSign, Plus, Search, MoreHorizontal, Pencil, Trash2, Download, Bell } from "lucide-react";
 import { downloadCSV } from "@/lib/csvExport";
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from "@/components/ui/dropdown-menu";
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from "@/components/ui/alert-dialog";
 import { useSchoolQuery, useSchoolMutation } from "@/hooks/useSchoolData";
 import { Skeleton } from "@/components/ui/skeleton";
+import { useAuth } from "@/contexts/AuthContext";
+import { useToast } from "@/hooks/use-toast";
+import { sendNotification } from "@/lib/notifications";
 
 interface Fee { id: string; student_id: string; total_due: number; paid_amount: number; status: string; due_date: string | null; description: string | null; school_id: string; }
 interface Student { id: string; full_name: string; grade_class: string | null; }
