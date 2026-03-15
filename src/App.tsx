@@ -34,7 +34,7 @@ import NotFound from "./pages/NotFound";
 import UpgradePlan from "./pages/UpgradePlan";
 import InviteUsers from "./pages/InviteUsers";
 import AuditLogs from "./pages/AuditLogs";
-
+import AuthCallback from "./pages/AuthCallback";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -63,6 +63,7 @@ const App = () => (
               <Route path="/forgot-password" element={<ForgotPassword />} />
               <Route path="/reset-password" element={<ResetPassword />} />
               <Route path="/signup-school" element={<SignupSchool />} />
+              <Route path="/auth/callback" element={<AuthCallback />} />
               <Route path="/dashboard" element={<ProtectedRoute><Dashboard /></ProtectedRoute>} />
               <Route path="/students" element={<ProtectedRoute><Students /></ProtectedRoute>} />
               <Route path="/teachers" element={<ProtectedRoute><Teachers /></ProtectedRoute>} />
