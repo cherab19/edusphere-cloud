@@ -106,11 +106,14 @@ Deno.serve(async (req) => {
     }
 
     // Send magic link invite via Supabase Auth
+    // Use the custom domain for redirect so invited users land on the live site
+    const siteUrl = Deno.env.get("SITE_URL") || "https://timhrtboost.vercel.app";
     const { error: inviteError } = await adminClient.auth.admin.inviteUserByEmail(email, {
       data: {
         invited_school_id: profileData.school_id,
         invited_role: role,
       },
+      redirectTo: `${siteUrl}/auth/callback`,
     });
 
     if (inviteError) {
