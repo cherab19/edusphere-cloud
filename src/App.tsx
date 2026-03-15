@@ -34,7 +34,7 @@ import NotFound from "./pages/NotFound";
 import UpgradePlan from "./pages/UpgradePlan";
 import InviteUsers from "./pages/InviteUsers";
 import AuditLogs from "./pages/AuditLogs";
-
+import AuthCallback from "./pages/AuthCallback";
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
