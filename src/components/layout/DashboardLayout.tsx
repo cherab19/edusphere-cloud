@@ -42,6 +42,7 @@ const allMenuItems: MenuItem[] = [
   { label: "Library", icon: Library, href: "/library", plans: ["enterprise"] },
   { label: "Transport", icon: Bus, href: "/transport", plans: ["enterprise"] },
   { label: "Invite Users", icon: UserPlus, href: "/invite-users", plans: ["starter", "pro", "enterprise"], allowedRoles: ["school_admin"] },
+  { label: "Messages", icon: MessageSquare, href: "/messages", plans: ["pro", "enterprise"] },
   { label: "Audit Logs", icon: ScrollText, href: "/audit-logs", plans: ["starter", "pro", "enterprise"], allowedRoles: ["school_admin"] },
   { label: "Settings", icon: Settings, href: "/settings", plans: ["starter", "pro", "enterprise"] },
 ];
