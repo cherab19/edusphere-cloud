@@ -3,7 +3,7 @@ import {
   LayoutDashboard, Users, GraduationCap, BookOpen, Layers, ClipboardCheck,
   BarChart3, FileText, DollarSign, PieChart, Library, Bus, Bell, Settings,
   LogOut, ChevronLeft, Menu, Calendar, FileSpreadsheet, Heart, Lock,
-  Sparkles, ArrowRight, UserPlus, ScrollText,
+  Sparkles, ArrowRight, UserPlus, ScrollText, MessageSquare,
 } from "lucide-react";
 import { useState } from "react";
 import LockedFeatureModal from "@/components/layout/LockedFeatureModal";
