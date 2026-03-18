@@ -224,7 +224,8 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             </div>
           )}
 
-          <main className="flex-1 p-6">{children}</main>
+          <main className="flex-1 p-4 lg:p-6 pb-20 lg:pb-6">{children}</main>
+          <MobileBottomNav />
         </div>
 
         <LockedFeatureModal
