@@ -7,34 +7,42 @@ import { ThemeProvider } from "next-themes";
 import { AuthProvider } from "@/contexts/AuthContext";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
 import ErrorBoundary from "@/components/ErrorBoundary";
+import { lazy, Suspense } from "react";
+import PageLoader from "@/components/ui/page-loader";
+
+// Eagerly loaded (landing, auth - first paint)
 import Landing from "./pages/Landing";
 import Login from "./pages/Login";
-import ForgotPassword from "./pages/ForgotPassword";
-import ResetPassword from "./pages/ResetPassword";
-import SignupSchool from "./pages/SignupSchool";
-import Dashboard from "./pages/Dashboard";
-import Students from "./pages/Students";
-import Teachers from "./pages/Teachers";
-import Classes from "./pages/Classes";
-import Subjects from "./pages/Subjects";
-import Attendance from "./pages/Attendance";
-import Grades from "./pages/Grades";
-import ReportCards from "./pages/ReportCards";
-import Fees from "./pages/Fees";
-import FinanceDashboard from "./pages/FinanceDashboard";
-import LibraryPage from "./pages/LibraryPage";
-import Transport from "./pages/Transport";
-import Announcements from "./pages/Announcements";
-import SuperAdminDashboard from "./pages/SuperAdminDashboard";
-import Settings from "./pages/Settings";
-import ParentPortal from "./pages/ParentPortal";
-import Timetable from "./pages/Timetable";
-import ExamManagement from "./pages/ExamManagement";
-import NotFound from "./pages/NotFound";
-import UpgradePlan from "./pages/UpgradePlan";
-import InviteUsers from "./pages/InviteUsers";
-import AuditLogs from "./pages/AuditLogs";
 import AuthCallback from "./pages/AuthCallback";
+
+// Lazy loaded (dashboard pages)
+const ForgotPassword = lazy(() => import("./pages/ForgotPassword"));
+const ResetPassword = lazy(() => import("./pages/ResetPassword"));
+const SignupSchool = lazy(() => import("./pages/SignupSchool"));
+const Dashboard = lazy(() => import("./pages/Dashboard"));
+const Students = lazy(() => import("./pages/Students"));
+const Teachers = lazy(() => import("./pages/Teachers"));
+const Classes = lazy(() => import("./pages/Classes"));
+const Subjects = lazy(() => import("./pages/Subjects"));
+const Attendance = lazy(() => import("./pages/Attendance"));
+const Grades = lazy(() => import("./pages/Grades"));
+const ReportCards = lazy(() => import("./pages/ReportCards"));
+const Fees = lazy(() => import("./pages/Fees"));
+const FinanceDashboard = lazy(() => import("./pages/FinanceDashboard"));
+const LibraryPage = lazy(() => import("./pages/LibraryPage"));
+const Transport = lazy(() => import("./pages/Transport"));
+const Announcements = lazy(() => import("./pages/Announcements"));
+const SuperAdminDashboard = lazy(() => import("./pages/SuperAdminDashboard"));
+const Settings = lazy(() => import("./pages/Settings"));
+const ParentPortal = lazy(() => import("./pages/ParentPortal"));
+const Timetable = lazy(() => import("./pages/Timetable"));
+const ExamManagement = lazy(() => import("./pages/ExamManagement"));
+const NotFound = lazy(() => import("./pages/NotFound"));
+const UpgradePlan = lazy(() => import("./pages/UpgradePlan"));
+const InviteUsers = lazy(() => import("./pages/InviteUsers"));
+const AuditLogs = lazy(() => import("./pages/AuditLogs"));
+const Messages = lazy(() => import("./pages/Messages"));
+
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
@@ -57,6 +65,7 @@ const App = () => (
         <BrowserRouter>
           <AuthProvider>
             <ErrorBoundary>
+            <Suspense fallback={<PageLoader />}>
             <Routes>
               <Route path="/" element={<Landing />} />
               <Route path="/login" element={<Login />} />
@@ -77,6 +86,7 @@ const App = () => (
               <Route path="/library" element={<ProtectedRoute><LibraryPage /></ProtectedRoute>} />
               <Route path="/transport" element={<ProtectedRoute><Transport /></ProtectedRoute>} />
               <Route path="/announcements" element={<ProtectedRoute><Announcements /></ProtectedRoute>} />
+              <Route path="/messages" element={<ProtectedRoute><Messages /></ProtectedRoute>} />
               <Route path="/settings" element={<ProtectedRoute><Settings /></ProtectedRoute>} />
               <Route path="/parent-portal" element={<ProtectedRoute allowedRoles={["school_admin", "parent"]}><ParentPortal /></ProtectedRoute>} />
               <Route path="/timetable" element={<ProtectedRoute><Timetable /></ProtectedRoute>} />
@@ -87,6 +97,7 @@ const App = () => (
               <Route path="/audit-logs" element={<ProtectedRoute allowedRoles={["school_admin"]}><AuditLogs /></ProtectedRoute>} />
               <Route path="*" element={<NotFound />} />
             </Routes>
+            </Suspense>
             </ErrorBoundary>
           </AuthProvider>
         </BrowserRouter>
