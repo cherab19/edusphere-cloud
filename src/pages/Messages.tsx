@@ -17,13 +17,11 @@ interface Message {
   content: string;
   created_at: string;
   read: boolean;
-  sender_name?: string;
 }
 
 interface Contact {
   user_id: string;
   full_name: string;
-  role?: string;
 }
 
 const Messages = () => {
@@ -33,7 +31,6 @@ const Messages = () => {
   const [messages, setMessages] = useState<Message[]>([]);
   const [searchQuery, setSearchQuery] = useState("");
 
-  // Get contacts (other users in the same school)
   const { data: contacts = [] } = useQuery({
     queryKey: ["contacts", schoolId],
     queryFn: async () => {
@@ -48,17 +45,16 @@ const Messages = () => {
     enabled: !!schoolId && !!user,
   });
 
-  // Get messages for selected contact
   const { data: fetchedMessages = [], refetch } = useQuery({
     queryKey: ["messages", selectedContact?.user_id],
     queryFn: async () => {
       if (!selectedContact || !user) return [];
       const { data } = await supabase
-        .from("direct_messages")
+        .from("direct_messages" as any)
         .select("*")
         .or(`and(sender_id.eq.${user.id},receiver_id.eq.${selectedContact.user_id}),and(sender_id.eq.${selectedContact.user_id},receiver_id.eq.${user.id})`)
         .order("created_at", { ascending: true });
-      return (data ?? []) as Message[];
+      return (data ?? []) as unknown as Message[];
     },
     enabled: !!selectedContact && !!user,
   });
@@ -67,7 +63,6 @@ const Messages = () => {
     setMessages(fetchedMessages);
   }, [fetchedMessages]);
 
-  // Realtime subscription
   useEffect(() => {
     if (!user || !selectedContact) return;
     const channel = supabase
@@ -87,12 +82,12 @@ const Messages = () => {
 
   const sendMessage = async () => {
     if (!newMessage.trim() || !selectedContact || !user || !schoolId) return;
-    const { error } = await supabase.from("direct_messages").insert({
+    const { error } = await supabase.from("direct_messages" as any).insert({
       sender_id: user.id,
       receiver_id: selectedContact.user_id,
       content: newMessage.trim(),
       school_id: schoolId,
-    });
+    } as any);
     if (error) {
       toast.error("Failed to send message");
     } else {
@@ -112,7 +107,7 @@ const Messages = () => {
         <Card className="rounded-xl overflow-hidden shadow-card h-[calc(100vh-12rem)]">
           <div className="flex h-full">
             {/* Contact list */}
-            <div className="w-72 border-r border-border flex flex-col bg-muted/30">
+            <div className="w-full sm:w-72 border-r border-border flex flex-col bg-muted/30">
               <div className="p-3 border-b border-border">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-muted-foreground" />
@@ -151,7 +146,7 @@ const Messages = () => {
             </div>
 
             {/* Chat area */}
-            <div className="flex-1 flex flex-col">
+            <div className="flex-1 flex flex-col hidden sm:flex">
               {selectedContact ? (
                 <>
                   <div className="h-14 px-4 flex items-center border-b border-border bg-card">
