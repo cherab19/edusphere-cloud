@@ -3,7 +3,7 @@ import {
   LayoutDashboard, Users, GraduationCap, BookOpen, Layers, ClipboardCheck,
   BarChart3, FileText, DollarSign, PieChart, Library, Bus, Bell, Settings,
   LogOut, ChevronLeft, Menu, Calendar, FileSpreadsheet, Heart, Lock,
-  Sparkles, ArrowRight, UserPlus, ScrollText,
+  Sparkles, ArrowRight, UserPlus, ScrollText, MessageSquare,
 } from "lucide-react";
 import { useState } from "react";
 import LockedFeatureModal from "@/components/layout/LockedFeatureModal";
@@ -11,6 +11,7 @@ import { cn } from "@/lib/utils";
 import { useAuth } from "@/contexts/AuthContext";
 import NotificationBell from "@/components/notifications/NotificationBell";
 import ThemeToggle from "@/components/theme/ThemeToggle";
+import MobileBottomNav from "@/components/layout/MobileBottomNav";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 type AppRole = "super_admin" | "school_admin" | "teacher" | "student" | "parent" | "accountant" | "staff";
@@ -41,6 +42,7 @@ const allMenuItems: MenuItem[] = [
   { label: "Library", icon: Library, href: "/library", plans: ["enterprise"] },
   { label: "Transport", icon: Bus, href: "/transport", plans: ["enterprise"] },
   { label: "Invite Users", icon: UserPlus, href: "/invite-users", plans: ["starter", "pro", "enterprise"], allowedRoles: ["school_admin"] },
+  { label: "Messages", icon: MessageSquare, href: "/messages", plans: ["pro", "enterprise"] },
   { label: "Audit Logs", icon: ScrollText, href: "/audit-logs", plans: ["starter", "pro", "enterprise"], allowedRoles: ["school_admin"] },
   { label: "Settings", icon: Settings, href: "/settings", plans: ["starter", "pro", "enterprise"] },
 ];
@@ -222,7 +224,8 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
             </div>
           )}
 
-          <main className="flex-1 p-6">{children}</main>
+          <main className="flex-1 p-4 lg:p-6 pb-20 lg:pb-6">{children}</main>
+          <MobileBottomNav />
         </div>
 
         <LockedFeatureModal
