@@ -234,7 +234,6 @@ const Dashboard = () => {
           </Card>
         </div>
       </div>
-      <SchoolAIChatbot />
     </DashboardLayout>
   );
 };
