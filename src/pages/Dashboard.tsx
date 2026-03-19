@@ -8,7 +8,6 @@ import { supabase } from "@/integrations/supabase/client";
 import { Skeleton } from "@/components/ui/skeleton";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import AIInsightsWidget from "@/components/dashboard/AIInsightsWidget";
-import SchoolAIChatbot from "@/components/dashboard/SchoolAIChatbot";
 import { motion } from "framer-motion";
 
 interface Student { id: string; full_name: string; grade_class: string | null; gender: string; created_at: string; }
@@ -234,7 +233,6 @@ const Dashboard = () => {
           </Card>
         </div>
       </div>
-      <SchoolAIChatbot />
     </DashboardLayout>
   );
 };

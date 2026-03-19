@@ -12,6 +12,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import NotificationBell from "@/components/notifications/NotificationBell";
 import ThemeToggle from "@/components/theme/ThemeToggle";
 import MobileBottomNav from "@/components/layout/MobileBottomNav";
+import SchoolAIChatbot from "@/components/dashboard/SchoolAIChatbot";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip";
 
 type AppRole = "super_admin" | "school_admin" | "teacher" | "student" | "parent" | "accountant" | "staff";
@@ -226,6 +227,7 @@ const DashboardLayout = ({ children }: DashboardLayoutProps) => {
 
           <main className="flex-1 p-4 lg:p-6 pb-20 lg:pb-6">{children}</main>
           <MobileBottomNav />
+          <SchoolAIChatbot />
         </div>
 
         <LockedFeatureModal
