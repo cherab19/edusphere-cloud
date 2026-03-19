@@ -9,7 +9,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell } from "recharts";
 import AIInsightsWidget from "@/components/dashboard/AIInsightsWidget";
 import { motion } from "framer-motion";
-import { motion } from "framer-motion";
 
 interface Student { id: string; full_name: string; grade_class: string | null; gender: string; created_at: string; }
 interface Teacher { id: string; full_name: string; }
