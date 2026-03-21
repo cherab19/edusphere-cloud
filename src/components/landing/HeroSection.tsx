@@ -97,8 +97,8 @@ const HeroSection = () => {
               </Link>
             </Button>
           </motion.div>
-
-
+        </div>
+      </div>
 
       {/* Bottom wave */}
       <div className="absolute bottom-0 left-0 right-0">
