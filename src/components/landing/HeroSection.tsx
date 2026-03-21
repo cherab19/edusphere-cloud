@@ -98,36 +98,7 @@ const HeroSection = () => {
             </Button>
           </motion.div>
 
-          {/* Social proof */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.6 }}
-            className="mt-16"
-          >
-            <p className="text-xs uppercase tracking-widest text-primary-foreground/40 mb-6 font-medium">Trusted by institutions across Ethiopia</p>
-            <div className="grid grid-cols-3 gap-8 max-w-md mx-auto">
-              {[
-                { icon: GraduationCap, label: "500+ Schools", value: "500+" },
-                { icon: Shield, label: "Bank-Level Security", value: "256-bit" },
-                { icon: Zap, label: "99.9% Uptime", value: "99.9%" },
-              ].map(({ icon: Icon, label, value }, i) => (
-                <motion.div
-                  key={label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 + i * 0.1 }}
-                  className="flex flex-col items-center gap-2 p-3 rounded-xl backdrop-blur-sm bg-white/5 border border-white/5"
-                >
-                  <Icon className="w-5 h-5 text-primary" />
-                  <span className="text-lg font-display font-bold text-primary-foreground">{value}</span>
-                  <span className="text-xs text-primary-foreground/50 font-medium">{label}</span>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </div>
+
 
       {/* Bottom wave */}
       <div className="absolute bottom-0 left-0 right-0">
