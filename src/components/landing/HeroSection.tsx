@@ -26,51 +26,7 @@ const HeroSection = () => {
         <motion.div animate={{ ...floatingAnimation, transition: { ...floatingAnimation.transition, delay: 0.5 } }} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/6 blur-3xl" />
       </motion.div>
 
-      {/* Floating glassmorphism cards */}
-      <motion.div
-        initial={{ opacity: 0, x: -50, rotate: -12 }}
-        animate={{ opacity: 1, x: 0, rotate: -12 }}
-        transition={{ duration: 1, delay: 0.8 }}
-        className="hidden xl:block absolute left-[5%] top-[20%] w-48 p-4 rounded-2xl backdrop-blur-xl bg-white/5 border border-white/10 shadow-2xl"
-      >
-        <motion.div animate={floatingAnimation}>
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-              <GraduationCap className="w-4 h-4 text-primary" />
-            </div>
-            <span className="text-xs font-semibold text-primary-foreground/80">Students</span>
-          </div>
-          <p className="text-2xl font-display font-bold text-primary-foreground">2,847</p>
-          <p className="text-xs text-primary-foreground/50 mt-1 flex items-center gap-1">
-            <span className="text-emerald-400">↑ 12%</span> this term
-          </p>
-        </motion.div>
-      </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, x: 50, rotate: 8 }}
-        animate={{ opacity: 1, x: 0, rotate: 8 }}
-        transition={{ duration: 1, delay: 1 }}
-        className="hidden xl:block absolute right-[5%] top-[30%] w-52 p-4 rounded-2xl backdrop-blur-xl bg-white/5 border border-white/10 shadow-2xl"
-      >
-        <motion.div animate={{ ...floatingAnimation, transition: { ...floatingAnimation.transition, delay: 0.8 } }}>
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
-              <Star className="w-4 h-4 text-emerald-400" />
-            </div>
-            <span className="text-xs font-semibold text-primary-foreground/80">Attendance</span>
-          </div>
-          <p className="text-2xl font-display font-bold text-primary-foreground">94.2%</p>
-          <div className="mt-2 w-full bg-white/10 rounded-full h-1.5">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: "94%" }}
-              transition={{ duration: 1.5, delay: 1.5 }}
-              className="bg-emerald-400 h-1.5 rounded-full"
-            />
-          </div>
-        </motion.div>
-      </motion.div>
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
