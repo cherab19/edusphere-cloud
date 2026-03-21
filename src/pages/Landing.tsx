@@ -13,7 +13,7 @@ const Landing = () => {
       <div id="features">
         <FeaturesSection />
       </div>
-      <TestimonialsSection />
+      
       <div id="pricing">
         <PricingSection />
       </div>
