@@ -1,26 +1,7 @@
 import { motion } from "framer-motion";
 import { Star, Quote } from "lucide-react";
 
-const testimonials = [
-  {
-    name: "Ato Bekele Tadesse",
-    role: "Principal, Lideta Academy",
-    text: "Timhrtboost transformed how we manage our school. Attendance tracking alone saved us 10 hours per week.",
-    rating: 5,
-  },
-  {
-    name: "W/ro Meron Hailu",
-    role: "Admin, Bright Future School",
-    text: "The AI insights helped us identify at-risk students early. Our pass rate improved by 15% in one semester.",
-    rating: 5,
-  },
-  {
-    name: "Ato Daniel Girma",
-    role: "Finance Head, Unity Academy",
-    text: "Fee collection went from chaotic spreadsheets to a clean dashboard. Parents love the transparency.",
-    rating: 5,
-  },
-];
+const testimonials: { name: string; role: string; text: string; rating: number }[] = [];
 
 const TestimonialsSection = () => {
   return (

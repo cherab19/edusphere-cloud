@@ -18,7 +18,7 @@ const FooterSection = () => {
               </span>
             </div>
             <p className="text-sm text-primary-foreground/50 max-w-sm leading-relaxed">
-              The all-in-one school management platform trusted by hundreds of institutions across Ethiopia.
+              The all-in-one AI-powered school management platform for modern institutions.
             </p>
           </div>
 

@@ -1,5 +1,5 @@
 import { motion, useScroll, useTransform } from "framer-motion";
-import { ArrowRight, GraduationCap, Shield, Zap, Play, Star } from "lucide-react";
+import { ArrowRight, Zap, Play } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { useRef } from "react";
@@ -26,51 +26,7 @@ const HeroSection = () => {
         <motion.div animate={{ ...floatingAnimation, transition: { ...floatingAnimation.transition, delay: 0.5 } }} className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] rounded-full bg-primary/6 blur-3xl" />
       </motion.div>
 
-      {/* Floating glassmorphism cards */}
-      <motion.div
-        initial={{ opacity: 0, x: -50, rotate: -12 }}
-        animate={{ opacity: 1, x: 0, rotate: -12 }}
-        transition={{ duration: 1, delay: 0.8 }}
-        className="hidden xl:block absolute left-[5%] top-[20%] w-48 p-4 rounded-2xl backdrop-blur-xl bg-white/5 border border-white/10 shadow-2xl"
-      >
-        <motion.div animate={floatingAnimation}>
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-8 h-8 rounded-lg bg-primary/20 flex items-center justify-center">
-              <GraduationCap className="w-4 h-4 text-primary" />
-            </div>
-            <span className="text-xs font-semibold text-primary-foreground/80">Students</span>
-          </div>
-          <p className="text-2xl font-display font-bold text-primary-foreground">2,847</p>
-          <p className="text-xs text-primary-foreground/50 mt-1 flex items-center gap-1">
-            <span className="text-emerald-400">↑ 12%</span> this term
-          </p>
-        </motion.div>
-      </motion.div>
 
-      <motion.div
-        initial={{ opacity: 0, x: 50, rotate: 8 }}
-        animate={{ opacity: 1, x: 0, rotate: 8 }}
-        transition={{ duration: 1, delay: 1 }}
-        className="hidden xl:block absolute right-[5%] top-[30%] w-52 p-4 rounded-2xl backdrop-blur-xl bg-white/5 border border-white/10 shadow-2xl"
-      >
-        <motion.div animate={{ ...floatingAnimation, transition: { ...floatingAnimation.transition, delay: 0.8 } }}>
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-8 h-8 rounded-lg bg-emerald-500/20 flex items-center justify-center">
-              <Star className="w-4 h-4 text-emerald-400" />
-            </div>
-            <span className="text-xs font-semibold text-primary-foreground/80">Attendance</span>
-          </div>
-          <p className="text-2xl font-display font-bold text-primary-foreground">94.2%</p>
-          <div className="mt-2 w-full bg-white/10 rounded-full h-1.5">
-            <motion.div
-              initial={{ width: 0 }}
-              animate={{ width: "94%" }}
-              transition={{ duration: 1.5, delay: 1.5 }}
-              className="bg-emerald-400 h-1.5 rounded-full"
-            />
-          </div>
-        </motion.div>
-      </motion.div>
 
       <div className="container mx-auto px-6 relative z-10">
         <div className="max-w-4xl mx-auto text-center">
@@ -140,35 +96,6 @@ const HeroSection = () => {
                 Sign In
               </Link>
             </Button>
-          </motion.div>
-
-          {/* Social proof */}
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.6 }}
-            className="mt-16"
-          >
-            <p className="text-xs uppercase tracking-widest text-primary-foreground/40 mb-6 font-medium">Trusted by institutions across Ethiopia</p>
-            <div className="grid grid-cols-3 gap-8 max-w-md mx-auto">
-              {[
-                { icon: GraduationCap, label: "500+ Schools", value: "500+" },
-                { icon: Shield, label: "Bank-Level Security", value: "256-bit" },
-                { icon: Zap, label: "99.9% Uptime", value: "99.9%" },
-              ].map(({ icon: Icon, label, value }, i) => (
-                <motion.div
-                  key={label}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ delay: 0.7 + i * 0.1 }}
-                  className="flex flex-col items-center gap-2 p-3 rounded-xl backdrop-blur-sm bg-white/5 border border-white/5"
-                >
-                  <Icon className="w-5 h-5 text-primary" />
-                  <span className="text-lg font-display font-bold text-primary-foreground">{value}</span>
-                  <span className="text-xs text-primary-foreground/50 font-medium">{label}</span>
-                </motion.div>
-              ))}
-            </div>
           </motion.div>
         </div>
       </div>
