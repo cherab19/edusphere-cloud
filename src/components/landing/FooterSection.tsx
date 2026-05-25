@@ -44,9 +44,16 @@ const FooterSection = () => {
           <p className="text-sm text-primary-foreground/40">
             © {new Date().getFullYear()} Timhrtboost. All rights reserved.
           </p>
-          <p className="text-xs text-primary-foreground/30">
-            Built with ❤️ for Ethiopian Schools
-          </p>
+          <a
+            href="https://lovable.dev"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-xs text-primary-foreground/40 hover:text-primary transition-colors inline-flex items-center gap-1.5"
+          >
+            <span>Built with</span>
+            <span className="font-semibold">❤ Lovable</span>
+            <span className="text-primary-foreground/30">· Sweepstake May 2026</span>
+          </a>
         </div>
       </div>
     </footer>
