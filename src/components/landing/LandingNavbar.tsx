@@ -37,7 +37,7 @@ const LandingNavbar = () => {
           </Link>
 
           <div className="hidden md:flex items-center gap-8">
-            {["Features", "Pricing"].map((item) => (
+            {["Features", "How", "Pricing", "FAQ"].map((item) => (
               <a
                 key={item}
                 href={`#${item.toLowerCase()}`}
