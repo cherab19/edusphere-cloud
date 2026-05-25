@@ -70,6 +70,10 @@ const LandingNavbar = () => {
             </button>
           </div>
         </div>
+        <motion.div
+          style={{ scaleX }}
+          className="absolute bottom-0 left-0 right-0 h-0.5 bg-primary origin-left"
+        />
       </motion.nav>
 
       {/* Mobile menu */}
