@@ -34,8 +34,17 @@ const HeroSection = () => {
             initial={{ opacity: 0, y: 30, scale: 0.9 }}
             animate={{ opacity: 1, y: 0, scale: 1 }}
             transition={{ duration: 0.7, ease: [0.22, 1, 0.36, 1] }}
-            className="mb-6"
+            className="mb-6 flex flex-col items-center gap-3"
           >
+            <a
+              href="https://lovable-builders-sweepstake.lovable.app"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-primary-foreground/15 bg-primary-foreground/5 backdrop-blur-sm text-primary-foreground/80 text-xs font-medium hover:bg-primary-foreground/10 transition-colors"
+            >
+              <span className="w-1.5 h-1.5 rounded-full bg-primary animate-pulse" />
+              Lovable Builders Sweepstake · May 23–25
+            </a>
             <span className="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-primary/30 bg-primary/10 backdrop-blur-sm text-primary text-sm font-medium">
               <Zap className="w-4 h-4" />
               AI-Powered School Management Platform
