@@ -87,7 +87,9 @@ const LandingNavbar = () => {
           >
             <div className="flex flex-col gap-4">
               <a href="#features" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-foreground py-2">Features</a>
+              <a href="#how" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-foreground py-2">How it works</a>
               <a href="#pricing" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-foreground py-2">Pricing</a>
+              <a href="#faq" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-foreground py-2">FAQ</a>
               <Link to="/login" onClick={() => setMobileMenuOpen(false)} className="text-sm font-medium text-foreground py-2">Sign In</Link>
               <Button asChild className="w-full rounded-lg mt-2">
                 <Link to="/signup-school" onClick={() => setMobileMenuOpen(false)}>Start Free</Link>
